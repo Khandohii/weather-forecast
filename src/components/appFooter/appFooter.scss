@@ -1,0 +1,15 @@
+@import '../../style/variables.scss';
+
+.footer{
+    background: rgba($color: $bg-blue, $alpha: .5);
+    margin-top: 100px;
+
+    &__cont{
+        padding: 15px;
+    }
+
+    &__text-logo{
+        font-size: 1.1em;
+        text-align: center;
+    }
+}

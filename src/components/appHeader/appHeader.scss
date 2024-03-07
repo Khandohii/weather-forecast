@@ -1,0 +1,20 @@
+@import '../../style/variables.scss';
+
+.header{
+    background: rgba($color: $bg-blue, $alpha: .5);
+
+    &__cont{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        padding: 30px 15px;
+    }
+
+    &__text-logo{
+        font-size: 1.5em;
+        font-weight: 700;
+    }
+    
+    &__city{}
+}
