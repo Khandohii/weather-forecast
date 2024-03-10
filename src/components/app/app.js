@@ -1,5 +1,5 @@
 
-import './app.scss';
+import './App.scss';
 
 import Header from '../appHeader/appHeader';
 import Day from '../day/day';
@@ -13,7 +13,6 @@ export default function App() {
             <div className="cont">
                 <Day />
             </div>
-
             <Footer />
         </div>
     );

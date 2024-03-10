@@ -1,6 +1,7 @@
 
 
 class WeatherService {
+    _apiBase = 'http://www.7timer.info/bin/api.pl?';
     getResource = async (url) => {
         let res = await fetch(url);
 
@@ -11,8 +12,8 @@ class WeatherService {
         return await res.json();
     }
 
-    getForecast = () => {
-        return this.getResource('http://www.7timer.info/bin/api.pl?lon=113.17&lat=23.09&product=civil&output=json')
+    getForecast = (lat, lon) => {
+        return this.getResource(`${this._apiBase}lon=${lon}&lat=${lat}&product=civil&output=json`)
     }
 }
 
