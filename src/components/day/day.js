@@ -1,109 +1,49 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import './day.scss';
 import Spinner from '../Spinner/spinner';
-import GeoLocationService from '../../services/geoLocationService';
-import OpenWeatherService from '../../services/openWeatherService';
-import SunrisesunsetService from '../../services/sunrisesunsetService';
+import useOpenWeatherService from '../../services/openWeatherService';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-class Day extends Component{
-    state = {
-        coords: [56.1676288, 10.174464],
-        city: null,
-        country: null,
 
-        currentTemperature: null,
-        skyCondition: null,
+const Day = (props) => {
+    const [weatherData, setWeatherData] = useState([]);
 
-        sunrise: null,
-        sunset: null,
-
-        feelsLikeTemp: null,
-        humidity: null,
-
-        windDirection: null,
-        windPower: null,
-
-        pressure: null,
-
-        iconUrl: null,
-
-        loading: true,
-        error: false,
-        
-    }
-
-    componentDidMount() {
-        this.updateDay();
-    }
-
-    openWeatherService = new OpenWeatherService();
-    sunrisesunsetService = new SunrisesunsetService();
-    geoLocationService = new GeoLocationService();
-
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
-    }
-
-    updateDay = () => {
-        this.geoLocationService
-            .getGeolocation()
-            .then((res) => {
-                this.setState({
-                    coords: res.coords,
-                    city: res.city,
-                    country: res.country,
-                });
-
-                this.sunrisesunsetService.getSunrisesunset(...this.state.coords).then((res) => {
-                    this.setState({
-                        sunrise: res.sunrise,
-                        sunset: res.sunset,
-                    });
-                }).catch(this.onError)
-        
-                this.openWeatherService
-                    .getForecast(...this.state.coords).then(res => {
-                        this.setState({
-                            currentTemperature: res.currentTemperature,
-                            skyCondition: res.skyCondition,
-                            windDirection: res.windDirection,
-                            windPower: res.windPower,
-                            humidity: res.humidity,
-                            feelsLikeTemp: res.feelsLikeTemp,
-                            pressure: res.pressure,
-                            iconUrl: res.iconUrl,
-        
-                            loading: false,
-                        })
-                    }).catch(this.onError)
-
-            }).catch(this.onError)
-    }
+    const {loading, error, getForecast} = useOpenWeatherService();
     
 
-    render() {
-        const {loading, error} = this.state;
+    useEffect(() => {
+        updateDay();
+    }, [props.coords])
 
-        const errorMessage = error ? <ErrorMessage /> : null;
-        const spinner = loading ? <Spinner /> : null;
-        const content = !(loading || error) ? <View data={this.state} /> : null;
-
-        return(
-            <div className="day">
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        );
+    function updateDay() {
+        const {coords} = props;
+        if (!coords) {
+            return;
+        }
+        getForecast(...coords)
+            .then(onDayLoaded);
     }
+
+    const onDayLoaded = (data) => {
+        setWeatherData(data);
+    }
+
+    const errorMessage = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !(loading || error) ? <View data={weatherData} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
+
+    return(
+        <div className="day">
+            {errorMessage}
+            {spinner}
+            {content}
+        </div>
+    );
 }
 
-const View = (data) => {
-    const {city, currentTemperature, skyCondition, sunrise, sunset, feelsLikeTemp, humidity, windPower, pressure, iconUrl} = data.data;
+const View = (props) => {
+    const {currentTemperature, skyCondition, feelsLikeTemp, humidity, windPower, pressure, iconUrl} = props.data;
+    const {city, sunset, sunrise} = props;
     return (
         <>
             <div className="day__city">{city}</div>
@@ -113,7 +53,7 @@ const View = (data) => {
             <div className="day__sky-condition">{skyCondition}</div>
 
             <div className="day__sky-condition-icon">
-                <img src={iconUrl} alt="" />
+                <img src={iconUrl} alt={skyCondition} />
             </div>
 
             <div className="day__hours">
@@ -177,7 +117,7 @@ const View = (data) => {
                 </div>
 
                 <div className="feature">
-                    <div className="feature__val">{humidity}</div>
+                    <div className="feature__val">{humidity} %</div>
                     <div className="feature__name">Humidity</div>
                 </div>
 

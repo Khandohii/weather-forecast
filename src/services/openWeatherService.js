@@ -1,25 +1,17 @@
+import {useHttp} from '../hooks/http.hook';
 
+const useOpenWeatherService = () => {
+    const {loading, request, error} = useHttp();
+    const _apiBase = 'http://api.openweathermap.org/data/2.5/weather?';
+    const _apiIconsBase = 'https://openweathermap.org/img/wn/';
+    const _apiKey = process.env.REACT_APP_API_KEY;
 
-class OpenWeatherService {
-    _apiBase = 'http://api.openweathermap.org/data/2.5/weather?';
-    _apiIconsBase = 'https://openweathermap.org/img/wn/';
-    _apiKey = process.env.REACT_APP_API_KEY;
-    getResource = async (url) => {
-        let res = await fetch(url);
-
-        if (!res.ok) {
-            throw new Error(`Couldn't fetch ${url}, status: ${res.status}`);
-        }
-
-        return await res.json();
+    const getForecast = async (lat, lon) => {
+        const res = await request(`${_apiBase}lat=${lat}&lon=${lon}&appid=${_apiKey}&units=metric`);
+        return _transformWeather(res);
     }
 
-    getForecast = async (lat, lon) => {
-        const res = await this.getResource(`${this._apiBase}lat=${lat}&lon=${lon}&appid=${this._apiKey}&units=metric`);
-        return this._transformWeather(res);
-    }
-
-    _transformWeather = (res) => {
+    const _transformWeather = (res) => {
         return {
             city: res.name,
             skyCondition: res.weather[0].main,
@@ -29,10 +21,12 @@ class OpenWeatherService {
             feelsLikeTemp: res.main.feels_like,
             humidity: res.main.humidity,
             pressure: res.main.pressure,
-            iconUrl: `${this._apiIconsBase}${res.weather[0].icon}@2x.png`,
+            iconUrl: `${_apiIconsBase}${res.weather[0].icon}@2x.png`,
             country: res.sys.country,
         }
     }
+
+    return {loading, error, getForecast};
 }
 
-export default OpenWeatherService;
+export default useOpenWeatherService;

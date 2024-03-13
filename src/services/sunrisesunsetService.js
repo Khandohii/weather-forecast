@@ -1,30 +1,22 @@
+import {useHttp} from '../hooks/http.hook';
 
+const useSunrisesunsetService = () => {
+    const {loading, request, error} = useHttp();
+    const _apiBase = 'https://api.sunrisesunset.io/json?';
 
-class SunrisesunsetService {
-    _apiBase = 'https://api.sunrisesunset.io/json?';
-    getResource = async (url) => {
-        let res = await fetch(url);
-
-        if (!res.ok) {
-            throw new Error(`Couldn't fetch ${url}, status: ${res.status}`);
-        }
-
-        return await res.json();
+    const getSunrisesunset = async (lat, lon) => {
+        const data = await request(`${_apiBase}lat=${lat}&lng=${lon}`);
+        return _transformSunrisesunset(data);
     }
 
-    getSunrisesunset = async (lat, lon) => {
-        const data = await this.getResource(`${this._apiBase}lat=${lat}&lng=${lon}`);
-        return this._transformSunrisesunset(data);
-    }
-
-    _transformSunrisesunset = (res) => {
+    const _transformSunrisesunset = (res) => {
         return {
-            sunrise: this.convertTimeTo24HourFormat(res.results.sunrise),
-            sunset: this.convertTimeTo24HourFormat(res.results.sunset),
+            sunrise: convertTimeTo24HourFormat(res.results.sunrise),
+            sunset: convertTimeTo24HourFormat(res.results.sunset),
         }
     }
 
-    convertTimeTo24HourFormat = (time) => {
+    const convertTimeTo24HourFormat = (time) => {
         const [timePart, period] = time.split(/\s+/);
         const [hours, minutes] = timePart.split(':').map(part => parseInt(part));
     
@@ -41,6 +33,8 @@ class SunrisesunsetService {
     
         return `${formattedHours}:${formattedMinutes}`;
     }
+
+    return {loading, error, getSunrisesunset};
 }
 
-export default SunrisesunsetService;
+export default useSunrisesunsetService;
