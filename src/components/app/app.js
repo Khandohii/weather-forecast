@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import './App.scss';
 
-import Header from '../appHeader/appHeader';
-import Day from '../day/day';
-import Footer from '../appFooter/appFooter';
+import Header from '../AppHeader/AppHeader';
+import Day from '../Day/Day';
+import Footer from '../AppFooter/AppFooter';
 
 import userGeoLocationService from '../../services/geoLocationService';
 import useSunrisesunsetService from '../../services/sunrisesunsetService';

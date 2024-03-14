@@ -1,36 +1,36 @@
 import { useState, useEffect } from 'react';
-import './day.scss';
+import './Day.scss';
 import Spinner from '../Spinner/spinner';
 import useOpenWeatherService from '../../services/openWeatherService';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 
 const Day = (props) => {
-    const [weatherData, setWeatherData] = useState([]);
+    const [currentWeatherData, setCurrentWeatherData] = useState([]);
 
-    const {loading, error, getForecast} = useOpenWeatherService();
+    const {loading, error, getCurrentWeather} = useOpenWeatherService();
     
 
     useEffect(() => {
         updateDay();
-    }, [props.coords])
+    }, [props.coords]);
 
     function updateDay() {
         const {coords} = props;
         if (!coords) {
             return;
         }
-        getForecast(...coords)
-            .then(onDayLoaded);
+        getCurrentWeather(...coords)
+            .then(onCurrentWeatherLoaded);
     }
 
-    const onDayLoaded = (data) => {
-        setWeatherData(data);
+    const onCurrentWeatherLoaded = (data) => {
+        setCurrentWeatherData(data);
     }
 
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error) ? <View data={weatherData} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
+    const content = !(loading || error) ? <View data={currentWeatherData} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
 
     return(
         <div className="day">
@@ -44,6 +44,9 @@ const Day = (props) => {
 const View = (props) => {
     const {currentTemperature, skyCondition, feelsLikeTemp, humidity, windPower, pressure, iconUrl} = props.data;
     const {city, sunset, sunrise} = props;
+
+    const {coords} = props;
+
     return (
         <>
             <div className="day__city">{city}</div>
@@ -53,34 +56,10 @@ const View = (props) => {
             <div className="day__sky-condition">{skyCondition}</div>
 
             <div className="day__sky-condition-icon">
-                <img src={iconUrl} alt={skyCondition} />
+                <img src={iconUrl + '@2x.png'} alt={skyCondition} />
             </div>
 
-            <div className="day__hours">
-                <div className="day__hour">
-                    <div className="day__hour-time">20:00</div>
-
-                    <div className="day__hour-sky-state">
-                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20.2031 0.9375C21.7031 3.1875 22.5938 5.90625 22.5938 8.8125C22.6406 16.6406 16.2188 22.9688 8.29688 22.9688C5.625 22.9688 3.09375 22.2188 0.9375 20.9531C3.375 25.7812 8.39062 29.0625 14.2031 29.0625C22.4062 29.0625 29.0625 22.5 29.0625 14.3906C29.0625 8.39063 25.4062 3.23438 20.2031 0.9375Z" fill="#FFCE31" />
-                        </svg>
-                    </div>
-
-                    <div className="day__hour-temperature">18 &deg;C</div>
-                </div>
-
-                <div className="day__hour">
-                    <div className="day__hour-time">21:00</div>
-
-                    <div className="day__hour-sky-state">
-                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20.2031 0.9375C21.7031 3.1875 22.5938 5.90625 22.5938 8.8125C22.6406 16.6406 16.2188 22.9688 8.29688 22.9688C5.625 22.9688 3.09375 22.2188 0.9375 20.9531C3.375 25.7812 8.39062 29.0625 14.2031 29.0625C22.4062 29.0625 29.0625 22.5 29.0625 14.3906C29.0625 8.39063 25.4062 3.23438 20.2031 0.9375Z" fill="#FFCE31" />
-                        </svg>
-                    </div>
-
-                    <div className="day__hour-temperature">17 &deg;C</div>
-                </div>
-            </div>
+            <Hours coords={coords} />
 
             <hr />
 
@@ -132,6 +111,59 @@ const View = (props) => {
                 </div>
             </div>
         </>
+    )
+}
+
+const Hours = ({coords}) => {
+    const hoursMaxLength = 8;
+    const [hourlyList, setHoursList] = useState([]);
+
+    const {loading, error, getHourlyForecast} = useOpenWeatherService();
+
+    useEffect(() => {
+        onRequest(coords);
+    }, [coords]);
+
+    const onRequest = (coords) => {
+        getHourlyForecast(...coords)
+            .then(onHourlyListLoaded)
+    }
+
+    const onHourlyListLoaded = (hourlyList) => {
+        setHoursList([...hourlyList]);
+    }
+
+    function renderItems(items) {
+        const hours = items.map((item, i) => {
+            if (hoursMaxLength <= i) return false;
+    
+            return(
+                <div key={i} className="day__hour">
+                    <div className="day__hour-time">{item.time}</div>
+    
+                    <div className="day__hour-sky-state">
+                        <img src={item.icon + '.png'} />
+                    </div>
+    
+                    <div className="day__hour-temperature">{item.temperature} &deg;C</div>
+                </div>
+            )
+        })
+
+        return hours;
+    }
+
+    const items = renderItems(hourlyList);
+
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spinner = loading ? <Spinner/> : null;
+
+    return(
+        <div className="day__hours">
+            {errorMessage}
+            {spinner}
+            {items}
+        </div>
     )
 }
 
