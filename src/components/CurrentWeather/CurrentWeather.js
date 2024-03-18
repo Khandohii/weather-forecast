@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import './Day.scss';
+import './CurrentWeather.scss';
 import Spinner from '../Spinner/spinner';
 import useOpenWeatherService from '../../services/openWeatherService';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 
-const Day = (props) => {
+const CurrentWeather = (props) => {
     const [currentWeatherData, setCurrentWeatherData] = useState([]);
 
     const {loading, error, getCurrentWeather} = useOpenWeatherService();
@@ -31,9 +31,9 @@ const Day = (props) => {
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading ? <Spinner /> : null;
     const content = !(loading || error) ? <View data={currentWeatherData} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
-
+    
     return(
-        <div className="day">
+        <div className="current-weather sect-marg">
             {errorMessage}
             {spinner}
             {content}
@@ -49,13 +49,13 @@ const View = (props) => {
 
     return (
         <>
-            <div className="day__city">{city}</div>
+            <div className="current-weather__city">{city}</div>
 
-            <div className="day__temperature">{currentTemperature} &deg;C</div>
+            <div className="current-weather__temperature">{currentTemperature} &deg;C</div>
 
-            <div className="day__sky-condition">{skyCondition}</div>
+            <div className="current-weather__sky-condition">{skyCondition}</div>
 
-            <div className="day__sky-condition-icon">
+            <div className="current-weather__sky-condition-icon">
                 <img src={iconUrl + '@2x.png'} alt={skyCondition} />
             </div>
 
@@ -89,7 +89,7 @@ const View = (props) => {
             </div>
 
 
-            <div className="day__features">
+            <div className="current-weather__features">
                 <div className="feature">
                     <div className="feature__val">{feelsLikeTemp} &deg;C</div>
                     <div className="feature__name">Feels Like</div>
@@ -138,14 +138,14 @@ const Hours = ({coords}) => {
             if (hoursMaxLength <= i) return false;
     
             return(
-                <div key={i} className="day__hour">
-                    <div className="day__hour-time">{item.time}</div>
+                <div key={i} className="current-weather__hour">
+                    <div className="current-weather__hour-time">{item.time}</div>
     
-                    <div className="day__hour-sky-state">
+                    <div className="current-weather__hour-sky-state">
                         <img src={item.icon + '.png'} />
                     </div>
     
-                    <div className="day__hour-temperature">{item.temperature} &deg;C</div>
+                    <div className="current-weather__hour-temperature">{item.temperature} &deg;C</div>
                 </div>
             )
         })
@@ -159,7 +159,7 @@ const Hours = ({coords}) => {
     const spinner = loading ? <Spinner/> : null;
 
     return(
-        <div className="day__hours">
+        <div className="current-weather__hours">
             {errorMessage}
             {spinner}
             {items}
@@ -167,4 +167,4 @@ const Hours = ({coords}) => {
     )
 }
 
-export default Day;
+export default CurrentWeather;

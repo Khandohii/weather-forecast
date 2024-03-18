@@ -66,7 +66,6 @@ button[type=reset] {
 ---------------*/
 :root {
     --scroll_width: 17px;
-    --font_family: 'Roboto', 'Arial', sans-serif;
 }
 
 
@@ -99,7 +98,7 @@ html {
 
 body {
     color: $main-color;
-    font: 16px/1.3 var(--font_family);
+    font: 16px/1.3 $font_family;
 
     height: 100%;
 
@@ -197,7 +196,7 @@ body.lock {
 
 .form .input {
     color: #000;
-    font: 350 18px var(--font_family);
+    font: 350 18px $font_family;
 
     display: block;
 
@@ -246,7 +245,7 @@ body.lock {
 
 .form .submit_btn {
     color: #fff;
-    font: 400 16px var(--font_family);
+    font: 400 16px $font_family;
 
     position: relative;
 

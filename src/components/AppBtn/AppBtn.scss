@@ -1,0 +1,29 @@
+
+@import '../../style/variables.scss';
+
+.btn{
+    button{
+        background: rgba($color: $bg-blue, $alpha: .6);
+        padding: 5px 30px;
+        height: 50px;
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+        display: inline-block;
+        vertical-align: top;
+        font-family: $font_family;
+        color: $main-color;
+        border: none;
+        cursor: pointer;
+        transition: $transition;
+        font-size: 1.05em;
+        font-weight: 500;
+
+        svg{
+            margin-right: 10px;
+        }
+
+        &:hover{
+            background: rgba($color: $bg-blue, $alpha: .8);
+        }
+    }
+}

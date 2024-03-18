@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import './App.scss';
 
 import Header from '../AppHeader/AppHeader';
-import Day from '../Day/Day';
+import CurrentWeather from '../CurrentWeather/CurrentWeather';
 import Footer from '../AppFooter/AppFooter';
+import AppBtn from '../AppBtn/AppBtn';
 
-import userGeoLocationService from '../../services/geoLocationService';
+import useGeoLocationService from '../../services/geoLocationService';
 import useSunrisesunsetService from '../../services/sunrisesunsetService';
 
 export default function App() {
@@ -16,14 +17,8 @@ export default function App() {
     const [sunrise, setSunrise] = useState(null);
     const [sunset, setSunset] = useState(null);
 
-    const {clearError, getGeolocation} = userGeoLocationService();
+    const {clearError, getGeolocation, getGeolocationByBrowser} = useGeoLocationService();
     const {getSunrisesunset} = useSunrisesunsetService();
-
-
-    useEffect(() => {
-        // getGeoposition();
-
-    }, [])
 
     useEffect(() => {
         getSunrisesunset(...coords).then((res) => {
@@ -42,13 +37,24 @@ export default function App() {
                 clearError();
             })
     }
+    
+    const getGeopositionByBrowser = () => {
+        getGeolocationByBrowser()
+            .then((res) => {
+                setCoords(res);
+            }).catch((e) => {
+                clearError();
+            })
+    }
 
     return (
         <div className="app">
             <Header city={city} country={country} />
 
             <div className="cont">
-                <Day coords={coords} city={city} sunrise={sunrise} sunset={sunset} />
+                <AppBtn className="sect-marg" clickFnc={getGeopositionByBrowser}>Get my geolocation</AppBtn>
+
+                <CurrentWeather coords={coords} city={city} sunrise={sunrise} sunset={sunset} />
             </div>
             <Footer />
         </div>
