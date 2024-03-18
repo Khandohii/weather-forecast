@@ -4,12 +4,10 @@
 .btn{
     button{
         background: rgba($color: $bg-blue, $alpha: .6);
-        padding: 5px 30px;
+        padding: 5px 25px;
         height: 50px;
         border-radius: 10px;
         backdrop-filter: blur(5px);
-        display: inline-block;
-        vertical-align: top;
         font-family: $font_family;
         color: $main-color;
         border: none;
@@ -17,9 +15,14 @@
         transition: $transition;
         font-size: 1.05em;
         font-weight: 500;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-wrap: nowrap;
 
         svg{
-            margin-right: 10px;
+            margin-right: 5px;
         }
 
         &:hover{
