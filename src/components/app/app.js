@@ -8,6 +8,7 @@ import AppBtn from '../AppBtn/AppBtn';
 
 import useGeoLocationService from '../../services/geoLocationService';
 import useSunrisesunsetService from '../../services/sunrisesunsetService';
+import useOpenCageDataService from '../../services/openCageDataService'
 
 export default function App() {
     const [coords, setCoords] = useState([56.1676288, 10.174464]);
@@ -18,13 +19,16 @@ export default function App() {
     const [sunset, setSunset] = useState(null);
 
     const {clearError, getGeolocation, getGeolocationByBrowser} = useGeoLocationService();
+    const {getLocationData} = useOpenCageDataService();
     const {getSunrisesunset} = useSunrisesunsetService();
 
     useEffect(() => {
         localStorageCoords();
+        getLocation();
     }, [])
 
     useEffect(() => {
+        getLocation();
         getSunrisesunset(...coords).then((res) => {
             setSunrise(res.sunrise);
             setSunset(res.sunset);
@@ -38,6 +42,16 @@ export default function App() {
                 setCity(res.city);
                 setCountry(res.country);
             }).catch((e) => {
+                clearError();
+            })
+    }
+
+    const getLocation = () => {
+        getLocationData(...coords)
+            .then((res) => {
+                setCity(res.city);
+                setCountry(res.country);
+            }).catch(() => {
                 clearError();
             })
     }
