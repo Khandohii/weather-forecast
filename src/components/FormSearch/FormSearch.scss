@@ -1,0 +1,49 @@
+@import '../../style/variables.scss';
+
+.form-search{
+    position: relative;
+    z-index: 10;
+
+    input{
+        display: block;
+        width: 100%;
+        font-family: $font-family;
+        font-size: 1.2em;
+        padding: 0 25px;
+        padding-left: 60px;
+        height: 60px;
+        border-radius: 10px;
+        border: none;
+        background: rgba($color: $bg-blue, $alpha: .4) url('../../resources/icons/search-icon.svg') 25px 50% no-repeat;
+        color: $main-color;
+    }
+
+    &__results{
+        position: absolute;
+        left: 0;
+        top: calc(100% + 15px);
+        background: $main-color;
+        color: $bg-blue;
+        padding: 15px;
+        border-radius: 10px;
+        width: 100%;
+        box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.2);
+
+        li{
+            list-style: none;
+            padding: 10px;
+            transition: $transition;
+            cursor: pointer;
+            border-radius: 10px;
+
+            & + li{
+                margin-top: 5px;
+            }
+
+            &:hover{
+                background: rgba($color: $bg-blue, $alpha: .6);
+                color: $main-color;
+            }
+        }
+    }
+}

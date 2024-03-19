@@ -9,6 +9,7 @@ import AppBtn from '../AppBtn/AppBtn';
 import useGeoLocationService from '../../services/geoLocationService';
 import useSunrisesunsetService from '../../services/sunrisesunsetService';
 import useOpenCageDataService from '../../services/openCageDataService'
+import FormSearch from '../FormSearch/FormSearch';
 
 export default function App() {
     const [coords, setCoords] = useState([56.1676288, 10.174464]);
@@ -95,6 +96,8 @@ export default function App() {
             <Header city={city} country={country} />
 
             <div className="cont">
+                <FormSearch className="sect-marg" />
+
                 {btnGetLocation}
 
                 <CurrentWeather coords={coords} city={city} sunrise={sunrise} sunset={sunset} />

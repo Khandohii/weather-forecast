@@ -150,15 +150,15 @@ body.lock {
 
 
 ::-webkit-input-placeholder {
-    color: #7e7e7e;
+    color: $placeholder-color;
 }
 
 ::-moz-placeholder {
-    color: #7e7e7e;
+    color: $placeholder-color;
 }
 
 :-ms-input-placeholder {
-    color: #7e7e7e;
+    color: $placeholder-color;
 }
 
 :focus::-webkit-input-placeholder {
