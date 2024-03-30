@@ -1,9 +1,14 @@
 import './FormSearch.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { Transition } from 'react-transition-group';
+import useOpenStreetMapService from '../../services/openStreetMapService';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const FormSearch = (props) => {
     const [showList, setShowList] = useState(false);
+    const [searchData, setSearchData] = useState('');
+    const [shouldSearch, setShouldSearch] = useState(false);
+    const [searchTimeout, setSearchTimeout] = useState(null);
 
     const handleFocus = () => {
         setShowList(true);
@@ -13,23 +18,38 @@ const FormSearch = (props) => {
         setShowList(false);
     };
 
+    const onInputChange = (event) => {
+        setSearchData(event.target.value);
+        clearTimeout(searchTimeout);
+        setSearchTimeout(setTimeout(() => setShouldSearch(true), 500));
+    };
+
+    useEffect(() => {
+        return () => clearTimeout(searchTimeout);
+    }, [searchTimeout]);
+
     return (
         <div className={'form-search ' + props.className}>
             <form action="" method="get">
                 <input 
+                    name='city'
                     type="text" 
                     placeholder='Search City' 
                     onFocus={handleFocus}
                     onBlur={handleBlur}
+                    onChange={onInputChange}
                 />
             </form>
 
-            <ResultList show={showList} />
+            <ResultList show={showList} searchData={searchData} shouldSearch={shouldSearch} setShouldSearch={setShouldSearch} />
         </div>
     )
 }
 
 const ResultList = (props) => {
+    const [cityList, setCityList] = useState([]);
+    const {loading, error, getLocationData} = useOpenStreetMapService();
+
     const duration = 300;
     
     const defaultStyle = {
@@ -45,6 +65,53 @@ const ResultList = (props) => {
       exited:  { opacity: 0 },
     };
 
+    useEffect(() => {
+        if (props.shouldSearch && props.searchData.length > 2) {
+            updateCitiesList(props.searchData);
+            props.setShouldSearch(false);
+        }
+    }, [props.shouldSearch, props.searchData]);
+
+    const updateCitiesList = (city) => {
+        getLocationData(city).then((res) => {
+            console.log(res);
+            onCitiesListLoaded(res)
+        })
+    }
+
+    const onCitiesListLoaded = (data) => {
+        setCityList(data);
+    }
+
+    function renderItems(items) {
+        const cities = items.map((item, i) => {    
+            return(
+                <li key={item.id}>
+                    {item.display_name}
+                </li>
+            )
+        })
+
+        if (props.searchData.length < 3) {
+            return "Input minumum 3 symbols"
+        }
+
+        if (items.length < 1) {
+            return "City not found"
+        }
+
+        return (
+            <ul>
+                {cities}
+            </ul>
+        );
+    }
+
+    const items = renderItems(cityList);
+
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spinner = loading ? "Loading..." : null;
+
     return(
         <Transition 
             in={props.show} 
@@ -52,22 +119,16 @@ const ResultList = (props) => {
             unmountOnExit
         >
             {state => (
-                <ul 
+                <div 
                     className='form-search__results'
                     style={{
                         ...defaultStyle,
                         ...transitionStyles[state]
                     }}
                 >
-                    <li>City 1</li>
-                    <li>City 2</li>
-                    <li>City 3</li>
-                    <li>City 4</li>
-                    <li>City 5</li>
-                    <li>City 6</li>
-                    <li>City 7</li>
-                    <li>City 8</li>
-                </ul>
+                    {errorMessage}
+                    {items || spinner || "Loading..."}
+                </div>
             )}
         </Transition>
     )

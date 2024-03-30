@@ -8,13 +8,11 @@ const useOpenWeatherService = () => {
 
     const getCurrentWeather = async (lat, lon) => {
         const res = await request(`${_apiBase}weather?lat=${lat}&lon=${lon}&appid=${_apiKey}&units=metric`);
-        console.log(res);
         return _transformWeather(res);
     }
 
     const getHourlyForecast = async (lat, lon) => {
         const res = await request(`${_apiBase}forecast?lat=${lat}&lon=${lon}&appid=${_apiKey}&units=metric`);
-        console.log(res);
         return res.list.map(item => transformHourlyForecast(item));
     }
 
