@@ -41,7 +41,7 @@ const FormSearch = (props) => {
                 />
             </form>
 
-            <ResultList show={showList} searchData={searchData} shouldSearch={shouldSearch} setShouldSearch={setShouldSearch} />
+            <ResultList show={showList} searchData={searchData} shouldSearch={shouldSearch} setCityFunc={props.setCityFunc} setCoordsGlobal={props.setCoordsGlobal} setShouldSearch={setShouldSearch} />
         </div>
     )
 }
@@ -87,7 +87,14 @@ const ResultList = (props) => {
         const cities = items.map((item, i) => {    
             return(
                 <li key={item.id}>
-                    {item.display_name}
+                    <button 
+                        onClick={() => {
+                            props.setCoordsGlobal(item.coords)
+                            props.setCityFunc(item.name)
+                        }}
+                    >
+                        {item.display_name}
+                    </button>
                 </li>
             )
         })
@@ -127,7 +134,7 @@ const ResultList = (props) => {
                     }}
                 >
                     {errorMessage}
-                    {items || spinner || "Loading..."}
+                    {spinner || items}
                 </div>
             )}
         </Transition>

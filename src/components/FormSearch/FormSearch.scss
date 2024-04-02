@@ -31,18 +31,28 @@
 
         li{
             list-style: none;
-            padding: 10px 15px;
-            transition: $transition;
-            cursor: pointer;
-            border-radius: 10px;
 
             & + li{
                 margin-top: 5px;
             }
 
-            &:hover{
-                background: rgba($color: $bg-blue, $alpha: .6);
-                color: $main-color;
+            button{
+                padding: 10px 15px;
+                transition: $transition;
+                cursor: pointer;
+                border-radius: 10px;
+                display: block;
+                width: 100%;
+                border: none;
+                background-color: transparent;
+                text-align: left;
+                font-family: $font-family;
+                font-size: 1.05em;
+
+                &:hover{
+                    background: rgba($color: $bg-blue, $alpha: .6);
+                    color: $main-color;
+                }
             }
         }
     }

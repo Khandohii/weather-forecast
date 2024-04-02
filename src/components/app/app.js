@@ -13,8 +13,9 @@ import FormSearch from '../FormSearch/FormSearch';
 
 export default function App() {
     const [coords, setCoords] = useState([56.1676288, 10.174464]);
-    const [city, setCity] = useState("Aarhus");
-    const [country, setCountry] = useState("Denmark");
+    const [city, setCity] = useState();
+    const [country, setCountry] = useState();
+    const [localStorageLoaded, setLocalStorageLoaded] = useState(false);
 
     const [sunrise, setSunrise] = useState(null);
     const [sunset, setSunset] = useState(null);
@@ -25,61 +26,67 @@ export default function App() {
 
     useEffect(() => {
         localStorageCoords();
-        getLocation();
     }, [])
 
     useEffect(() => {
-        getLocation();
-        getSunrisesunset(...coords).then((res) => {
-            setSunrise(res.sunrise);
-            setSunset(res.sunset);
-        });
-    }, [coords])
-    
-    const getGeoposition = () => {
-        getGeolocation()
-            .then((res) => {
-                setCoords(res.coords);
-                setCity(res.city);
-                setCountry(res.country);
-            }).catch((e) => {
-                clearError();
-            })
+        if (localStorageLoaded) {
+            getSunrisesunset(...coords).then((res) => {
+                setSunrise(res.sunrise);
+                setSunset(res.sunset);
+            });
+            getLocation(coords);
+        }
+    }, [coords, localStorageLoaded])
+
+    const setCityFunc = (cityName) => {
+        setCity(cityName)
     }
 
-    const getLocation = () => {
-        getLocationData(...coords)
+    const setCoordsGlobal = (coords) => {
+        setCoords(coords);
+        localStorage.setItem('coords', coords)
+    }
+
+    const getLocation = (newCoords) => {
+        getLocationData(...newCoords)
             .then((res) => {
-                setCity(res.city);
+                if (res.city) {
+                    setCity(res.city);
+                }
                 setCountry(res.country);
-            }).catch(() => {
-                clearError();
+            }).catch((error) => {
+                throw error;
             })
     }
     
     const getGeopositionByBrowser = () => {
         getGeolocationByBrowser()
             .then((res) => {
-                setCoords(res);
-                localStorage.setItem('coords', res)
-            }).catch((e) => {
+                setCoordsGlobal(res);
+                localStorage.setItem('localCoords', res)
+            }).catch(() => {
                 clearError();
             })
     }
 
+    const getLocalStorageCoords = (storageCoords) => {
+        const result = storageCoords ? storageCoords.split(",").map(item => parseFloat(item.trim())) : null;
+        return result;
+    }
+
     const localStorageCoords = () => {
         if (localStorage.getItem('coords')) {
-            const mycoords = localStorage.getItem('coords').split(",").map(item => parseFloat(item.trim()));
+            const mycoords = getLocalStorageCoords(localStorage.getItem('coords'));
             if (localStorage.getItem('coords') && mycoords !== coords) {
                 setCoords(mycoords);
             }
         }
+        setLocalStorageLoaded(true);
     }
 
 
-
     let btnGetLocation = null;
-    if (!localStorage.getItem('coords')) {
+    if (!localStorage.getItem('localCoords') || JSON.stringify(coords) !== JSON.stringify(getLocalStorageCoords(localStorage.getItem('localCoords')))) {
         btnGetLocation = (
             <AppBtn className="sect-marg" clickFnc={getGeopositionByBrowser}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +103,7 @@ export default function App() {
             <Header city={city} country={country} />
 
             <div className="cont">
-                <FormSearch className="sect-marg" />
+                <FormSearch className="sect-marg" setCoordsGlobal={setCoordsGlobal} setCityFunc={setCityFunc} />
 
                 {btnGetLocation}
 
