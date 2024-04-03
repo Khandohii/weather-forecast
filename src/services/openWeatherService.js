@@ -13,25 +13,102 @@ const useOpenWeatherService = () => {
 
     const getHourlyForecast = async (lat, lon) => {
         const res = await request(`${_apiBase}forecast?lat=${lat}&lon=${lon}&appid=${_apiKey}&units=metric`);
-        return res.list.map(item => transformHourlyForecast(item));
+        const finalResult = _transformHourlyForecast(res)
+        console.log(finalResult);
+        return finalResult;
     }
 
-    const transformHourlyForecast = (res) => {
-        return {
-            time: getFormattedTimeFromUnix(res.dt),
-            icon: `${_apiIconsBase}${res.weather[0].icon}`,
-            temperature: res.main.temp.toFixed(1),
-        }
+    const _transformHourlyForecast = (res) => {
+        let result = {};
+        const hourlyForecast = res.list.map(item => {
+            return{
+                time: getFormattedTimeFromUnix(item.dt),
+                icon: `${_apiIconsBase}${item.weather[0].icon}`,
+                temperature: _roundToOneDecimalPlace(item.main.temp)
+            }
+        })
+
+        const dailyForecast = _groupByDay(res.list);
+
+        result = Object.assign({hourlyForecast}, {dailyForecast});
+        return result;
     }
+    
+
+    const _groupByDay = (data) => {
+        const groupedData = {};
+
+        data.forEach(item => {
+            const date = new Date(item.dt_txt);
+            const day = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+            if (!groupedData[day]) {
+                groupedData[day] = {
+                    minTemp: item.main.temp_min,
+                    maxTemp: item.main.temp_max,
+                    weather: {},
+                    icon: {}
+                };
+            } else {
+                if (item.main.temp_min < groupedData[day].minTemp) {
+                    groupedData[day].minTemp = item.main.temp_min;
+                }
+                if (item.main.temp_max > groupedData[day].maxTemp) {
+                    groupedData[day].maxTemp = item.main.temp_max;
+                }
+            }
+
+            const weather = item.weather[0].main;
+            const icon = item.weather[0].icon;
+
+            if (!groupedData[day].weather[weather]) {
+                groupedData[day].weather[weather] = 1;
+            } else {
+                groupedData[day].weather[weather]++;
+            }
+
+            if (!groupedData[day].icon[icon]) {
+                groupedData[day].icon[icon] = 1;
+            } else {
+                groupedData[day].icon[icon]++;
+            }
+        });
+
+        Object.keys(groupedData).forEach(date => {
+            let maxWeather = '';
+            let maxWeatherCount = 0;
+            let maxIcon = '';
+            let maxIconCount = 0;
+
+            Object.keys(groupedData[date].weather).forEach(weather => {
+                if (groupedData[date].weather[weather] > maxWeatherCount) {
+                    maxWeather = weather;
+                    maxWeatherCount = groupedData[date].weather[weather];
+                }
+            });
+
+            Object.keys(groupedData[date].icon).forEach(icon => {
+                if (groupedData[date].icon[icon] > maxIconCount) {
+                    maxIcon = icon;
+                    maxIconCount = groupedData[date].icon[icon];
+                }
+            });
+
+            groupedData[date].weather = maxWeather;
+            groupedData[date].icon = maxIcon;
+        });
+
+        return groupedData;
+    };
 
     const _transformWeather = (res) => {
         return {
             city: res.name,
             skyCondition: res.weather[0].main,
             windPower: res.wind.speed,
-            currentTemperature: res.main.temp,
+            currentTemperature: _roundToOneDecimalPlace(res.main.temp),
             windDirection: res.wind.deg,
-            feelsLikeTemp: res.main.feels_like,
+            feelsLikeTemp: _roundToOneDecimalPlace(res.main.feels_like),
             humidity: res.main.humidity,
             pressure: res.main.pressure,
             iconUrl: `${_apiIconsBase}${res.weather[0].icon}`,
@@ -45,7 +122,11 @@ const useOpenWeatherService = () => {
         const formattedTime = `${hours < 10 ? '0' : ''}${hours}:00`;
       
         return formattedTime;
-      }
+    }
+
+    const _roundToOneDecimalPlace = (number) => {
+        return Math.round(number * 10) / 10;
+    };
 
     return {loading, error, getCurrentWeather, getHourlyForecast};
 }

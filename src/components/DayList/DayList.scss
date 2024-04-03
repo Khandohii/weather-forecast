@@ -1,0 +1,63 @@
+@import '../../style/variables.scss';
+
+.day {
+    background: rgba($color: $bg-blue, $alpha: .4);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    text-align: center;
+
+    &__date {
+        font-size: 1.1em;
+        margin-bottom: 15px;
+    }
+
+    &__sky-condition {
+        font-size: 1.4em;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+    &__sky-condition-icon {
+
+        margin-bottom: 10px;
+
+        img{
+            display: block;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+    }
+    &__temp {
+        display: flex;
+        justify-content: center;
+
+        &-item{
+            margin: 0 15px;
+
+            &-name{
+                margin-bottom: 5px;
+                color: #e8e8e8;
+            }
+
+            &-val{
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.day-list {
+    &__grid {
+        --margin-left: 20px;
+        --margin-bottom: 20px;
+        --items: 5;
+        
+        margin-left: calc(var(--margin-left, 0) * -1);
+        margin-bottom: calc(var(--margin-bottom, 0) * -1);
+    }
+    &__day {
+        margin-left: var(--margin-left, 0);
+        margin-bottom: var(--margin-bottom, 0);
+        width: calc(100% / var(--items, 1) - var(--margin-left, 0));
+    }
+}

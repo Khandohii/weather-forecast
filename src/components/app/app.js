@@ -9,20 +9,28 @@ import AppBtn from '../AppBtn/AppBtn';
 import useGeoLocationService from '../../services/geoLocationService';
 import useSunrisesunsetService from '../../services/sunrisesunsetService';
 import useOpenCageDataService from '../../services/openCageDataService'
+import useOpenWeatherService from '../../services/openWeatherService';
 import FormSearch from '../FormSearch/FormSearch';
+import DayList from '../DayList/DayList';
 
 export default function App() {
     const [coords, setCoords] = useState([56.1676288, 10.174464]);
     const [city, setCity] = useState();
     const [country, setCountry] = useState();
+    const [hourlyList, setHourlyList] = useState([]);
+    const [daysList, setDaysList] = useState([]);
     const [localStorageLoaded, setLocalStorageLoaded] = useState(false);
 
     const [sunrise, setSunrise] = useState(null);
     const [sunset, setSunset] = useState(null);
 
-    const {clearError, getGeolocation, getGeolocationByBrowser} = useGeoLocationService();
+    const {clearError, getGeolocationByBrowser} = useGeoLocationService();
     const {getLocationData} = useOpenCageDataService();
     const {getSunrisesunset} = useSunrisesunsetService();
+
+    
+
+    const {getHourlyForecast} = useOpenWeatherService();
 
     useEffect(() => {
         localStorageCoords();
@@ -35,8 +43,21 @@ export default function App() {
                 setSunset(res.sunset);
             });
             getLocation(coords);
+            onRequest(coords);
         }
-    }, [coords, localStorageLoaded])
+    }, [coords, localStorageLoaded]);
+
+    const onRequest = (coords) => {
+        getHourlyForecast(...coords)
+            .then((res) => {
+                onHourlyListLoaded(res)
+            })
+    }
+
+    const onHourlyListLoaded = (hourlyList) => {
+        setHourlyList([...hourlyList.hourlyForecast]);
+        setDaysList(hourlyList.dailyForecast)
+    }
 
     const setCityFunc = (cityName) => {
         setCity(cityName)
@@ -107,7 +128,9 @@ export default function App() {
 
                 {btnGetLocation}
 
-                <CurrentWeather coords={coords} city={city} sunrise={sunrise} sunset={sunset} />
+                <CurrentWeather coords={coords} city={city} sunrise={sunrise} sunset={sunset} hourlyList={hourlyList} />
+
+                <DayList daysList={daysList}/>
             </div>
             <Footer />
         </div>

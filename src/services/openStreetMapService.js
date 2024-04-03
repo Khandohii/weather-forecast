@@ -6,7 +6,6 @@ const useOpenStreetMapService = () => {
 
     const getLocationData = async (cityName) => {
         const res = await request(`${_apiBase}search?q=${cityName}&format=json`);
-        console.log(res);
         return _transformData(res);
     }
 

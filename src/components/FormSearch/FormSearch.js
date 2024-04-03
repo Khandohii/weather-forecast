@@ -74,7 +74,6 @@ const ResultList = (props) => {
 
     const updateCitiesList = (city) => {
         getLocationData(city).then((res) => {
-            console.log(res);
             onCitiesListLoaded(res)
         })
     }

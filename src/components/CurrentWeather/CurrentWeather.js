@@ -30,7 +30,7 @@ const CurrentWeather = (props) => {
 
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error) ? <View data={currentWeatherData} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
+    const content = !(loading || error) ? <View data={currentWeatherData} hourlyList={props.hourlyList} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
     
     return(
         <div className="current-weather sect-marg">
@@ -45,8 +45,6 @@ const View = (props) => {
     const {currentTemperature, skyCondition, feelsLikeTemp, humidity, windPower, pressure, iconUrl} = props.data;
     const {city, sunset, sunrise} = props;
 
-    const {coords} = props;
-
     return (
         <>
             <div className="current-weather__city">{city}</div>
@@ -59,7 +57,7 @@ const View = (props) => {
                 <img src={iconUrl + '@2x.png'} alt={skyCondition} />
             </div>
 
-            <Hours coords={coords} />
+            <Hours hourlyList={props.hourlyList} />
 
             <hr />
 
@@ -114,24 +112,8 @@ const View = (props) => {
     )
 }
 
-const Hours = ({coords}) => {
+const Hours = ({hourlyList}) => {
     const hoursMaxLength = 8;
-    const [hourlyList, setHoursList] = useState([]);
-
-    const {loading, error, getHourlyForecast} = useOpenWeatherService();
-
-    useEffect(() => {
-        onRequest(coords);
-    }, [coords]);
-
-    const onRequest = (coords) => {
-        getHourlyForecast(...coords)
-            .then(onHourlyListLoaded)
-    }
-
-    const onHourlyListLoaded = (hourlyList) => {
-        setHoursList([...hourlyList]);
-    }
 
     function renderItems(items) {
         const hours = items.map((item, i) => {
@@ -155,13 +137,8 @@ const Hours = ({coords}) => {
 
     const items = renderItems(hourlyList);
 
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-
     return(
         <div className="current-weather__hours">
-            {errorMessage}
-            {spinner}
             {items}
         </div>
     )
