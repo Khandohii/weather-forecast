@@ -28,9 +28,11 @@ const CurrentWeather = (props) => {
         setCurrentWeatherData(data);
     }
 
+    console.log(props.locationLoading);
+
     const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error) ? <View data={currentWeatherData} hourlyList={props.hourlyList} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
+    const spinner = loading || props.weatherLoading || props.locationLoading ? <Spinner /> : null;
+    const content = !(spinner || error) ? <View data={currentWeatherData} hourlyList={props.hourlyList} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
     
     return(
         <div className="current-weather sect-marg">

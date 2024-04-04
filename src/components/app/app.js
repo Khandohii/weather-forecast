@@ -25,12 +25,10 @@ export default function App() {
     const [sunset, setSunset] = useState(null);
 
     const {clearError, getGeolocationByBrowser} = useGeoLocationService();
-    const {getLocationData} = useOpenCageDataService();
-    const {getSunrisesunset} = useSunrisesunsetService();
+    const {loading: locationLoading, getLocationData} = useOpenCageDataService();
+    const {getSunrisesunset} = useSunrisesunsetService();    
 
-    
-
-    const {getHourlyForecast} = useOpenWeatherService();
+    const {loading: weatherLoading, getHourlyForecast} = useOpenWeatherService();
 
     useEffect(() => {
         localStorageCoords();
@@ -128,7 +126,7 @@ export default function App() {
 
                 {btnGetLocation}
 
-                <CurrentWeather coords={coords} city={city} sunrise={sunrise} sunset={sunset} hourlyList={hourlyList} />
+                <CurrentWeather coords={coords} city={city} sunrise={sunrise} locationLoading={locationLoading} weatherLoading={weatherLoading} sunset={sunset} hourlyList={hourlyList} />
 
                 <DayList daysList={daysList}/>
             </div>

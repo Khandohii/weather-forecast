@@ -5,6 +5,10 @@ const DayList = (props) => {
 
     function renderItems(items) {
         const days = items.map((item, i) => {
+            if (_isTodaySpecifiedDate(item.date)) {
+                return false;
+            }
+            
             return(
                 <div key={i} className="day-list__day day">
                     <div className="day__date">{item.date}</div>
@@ -59,5 +63,21 @@ const convertToArr = (groupedData) => {
 const _roundToOneDecimalPlace = (number) => {
     return Math.round(number * 10) / 10;
 };
+
+function _isTodaySpecifiedDate(dateString) {
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const today = new Date();
+    const parts = dateString.split(' ');
+    const monthIndex = months.findIndex(month => month === parts[0]);
+    const day = parseInt(parts[1]);
+
+    const targetDate = new Date(today.getFullYear(), monthIndex, day);
+
+    return today.getMonth() === targetDate.getMonth() && today.getDate() === targetDate.getDate();
+}
 
 export default DayList;
