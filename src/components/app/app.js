@@ -128,7 +128,7 @@ export default function App() {
 
                 <CurrentWeather coords={coords} city={city} sunrise={sunrise} locationLoading={locationLoading} weatherLoading={weatherLoading} sunset={sunset} hourlyList={hourlyList} />
 
-                <DayList daysList={daysList}/>
+                <DayList daysList={daysList} weatherLoading={weatherLoading}/>
             </div>
             <Footer />
         </div>

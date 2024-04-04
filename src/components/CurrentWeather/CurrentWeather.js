@@ -9,6 +9,8 @@ const CurrentWeather = (props) => {
     const [currentWeatherData, setCurrentWeatherData] = useState([]);
 
     const {loading, error, getCurrentWeather} = useOpenWeatherService();
+
+    const {weatherLoading, locationLoading, hourlyList, coords, city, sunset, sunrise} = props;
     
 
     useEffect(() => {
@@ -29,8 +31,8 @@ const CurrentWeather = (props) => {
     }
 
     const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading || props.weatherLoading || props.locationLoading ? <Spinner /> : null;
-    const content = !(spinner || error) ? <View data={currentWeatherData} hourlyList={props.hourlyList} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
+    const spinner = loading || weatherLoading || locationLoading ? <Spinner /> : null;
+    const content = !(spinner || error) ? <View data={currentWeatherData} hourlyList={hourlyList} coords={coords} city={city} sunset={sunset} sunrise={sunrise} /> : null;
     
     return(
         <div className="current-weather sect-marg">

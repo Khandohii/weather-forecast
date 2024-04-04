@@ -1,6 +1,21 @@
 import './DayList.scss';
+import Spinner from '../Spinner/spinner';
 
 const DayList = (props) => {
+    const {daysList, weatherLoading} = props;
+
+    const spinner = weatherLoading ? <Spinner /> : null;
+    const content = !(spinner) ? <View daysList={daysList}/> : null;
+
+    return(
+        <section className="day-list sect-marg">
+            {spinner}
+            {content}
+        </section>
+    )
+}
+
+const View = (props) => {
     const daysList = convertToArr(props.daysList);
 
     function renderItems(items) {
@@ -43,11 +58,9 @@ const DayList = (props) => {
     const items = renderItems(daysList);
 
     return(
-        <section className="day-list sect-marg">
-            <div className="day-list__grid flex">
-                {items}
-            </div>
-        </section>
+        <div className="day-list__grid flex">
+            {items}
+        </div>
     )
 }
 
