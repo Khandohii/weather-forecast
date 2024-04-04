@@ -14,7 +14,6 @@ const useOpenWeatherService = () => {
     const getHourlyForecast = async (lat, lon) => {
         const res = await request(`${_apiBase}forecast?lat=${lat}&lon=${lon}&appid=${_apiKey}&units=metric`);
         const finalResult = _transformHourlyForecast(res)
-        console.log(finalResult);
         return finalResult;
     }
 
@@ -36,7 +35,6 @@ const useOpenWeatherService = () => {
     
 
     const _groupByDay = (data) => {
-        console.log(data);
         const groupedData = {};
 
         data.forEach(item => {

@@ -2,7 +2,6 @@ import './FormSearch.scss';
 import React, { useEffect, useState} from 'react';
 import { Transition } from 'react-transition-group';
 import useOpenStreetMapService from '../../services/openStreetMapService';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const FormSearch = (props) => {
     const [showList, setShowList] = useState(false);
@@ -75,6 +74,8 @@ const ResultList = (props) => {
     const updateCitiesList = (city) => {
         getLocationData(city).then((res) => {
             onCitiesListLoaded(res)
+        }).catch((e) => {
+            throw e;
         })
     }
 
@@ -115,7 +116,7 @@ const ResultList = (props) => {
 
     const items = renderItems(cityList);
 
-    const errorMessage = error ? <ErrorMessage/> : null;
+    const errorMessage = error ? "Error" : null;
     const spinner = loading ? "Loading..." : null;
 
     return(

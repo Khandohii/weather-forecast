@@ -23,7 +23,6 @@ const View = (props) => {
             if (_isTodaySpecifiedDate(item.date)) {
                 return false;
             }
-            console.log(item);
 
             return(
                 <div key={i} className="day-list__day day">
