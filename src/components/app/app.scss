@@ -36,3 +36,23 @@
         }
     }
 }
+
+@media (max-width: 768px){
+    .sect-marg{
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 479px){
+    .sect-marg{
+        margin-top: 30px;
+    }
+
+
+    .city{        
+        &__icon{
+            width: 22px;
+            margin-right: 3px;
+        }
+    }
+}

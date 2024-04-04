@@ -36,6 +36,7 @@ const useOpenWeatherService = () => {
     
 
     const _groupByDay = (data) => {
+        console.log(data);
         const groupedData = {};
 
         data.forEach(item => {
@@ -44,6 +45,7 @@ const useOpenWeatherService = () => {
 
             if (!groupedData[day]) {
                 groupedData[day] = {
+                    dayOfWeek: getDayOfWeekFromUnixTime(item.dt),
                     minTemp: item.main.temp_min,
                     maxTemp: item.main.temp_max,
                     weather: {},
@@ -116,6 +118,14 @@ const useOpenWeatherService = () => {
         }
     }
 
+    const unixTimeToTime = (unixTime) => {
+        const date = new Date(unixTime * 1000)
+        const hours = date.getHours()
+        const minutes = "0" + date.getMinutes()
+        const formattedTime = hours + ':' + minutes.substr(-2);
+        return formattedTime;
+    }
+
     const getFormattedTimeFromUnix = (unixTime) => {
         const date = new Date(unixTime * 1000);
         const hours = date.getHours();
@@ -127,6 +137,16 @@ const useOpenWeatherService = () => {
     const _roundToOneDecimalPlace = (number) => {
         return Math.round(number * 10) / 10;
     };
+
+    const getDayOfWeekFromUnixTime = (unixTime) => {
+        const date = new Date(unixTime * 1000);
+        
+        const dayOfWeekNumber = date.getDay();
+        
+        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        
+        return daysOfWeek[dayOfWeekNumber];
+    }
 
     return {loading, error, getCurrentWeather, getHourlyForecast};
 }

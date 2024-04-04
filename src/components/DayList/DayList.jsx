@@ -8,9 +8,12 @@ const DayList = (props) => {
             if (_isTodaySpecifiedDate(item.date)) {
                 return false;
             }
-            
+            console.log(item);
+
             return(
                 <div key={i} className="day-list__day day">
+                    <div className="day__day-week">{item.dayOfWeek}</div>
+
                     <div className="day__date">{item.date}</div>
 
                     <div className="day__sky-condition">{item.weather}</div>
@@ -55,6 +58,7 @@ const convertToArr = (groupedData) => {
             minTemp: _roundToOneDecimalPlace(data.minTemp),
             maxTemp: _roundToOneDecimalPlace(data.maxTemp),
             weather: data.weather,
+            dayOfWeek: data.dayOfWeek,
             icon: data.icon
         };
     });

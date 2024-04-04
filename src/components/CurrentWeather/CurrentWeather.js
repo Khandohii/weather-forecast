@@ -28,8 +28,6 @@ const CurrentWeather = (props) => {
         setCurrentWeatherData(data);
     }
 
-    console.log(props.locationLoading);
-
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading || props.weatherLoading || props.locationLoading ? <Spinner /> : null;
     const content = !(spinner || error) ? <View data={currentWeatherData} hourlyList={props.hourlyList} coords={props.coords} city={props.city} sunset={props.sunset} sunrise={props.sunrise} /> : null;
@@ -73,7 +71,7 @@ const View = (props) => {
                 </div>
 
                 <div className="sunrize-sunset__icon">
-                    <svg width="369" height="108" viewBox="0 0 369 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="369" viewBox="0 0 369 108" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <line y1="106.5" x2="367" y2="106.5" stroke="#CFDFEC" />
                         <path d="M1.13129 105.942C81 -33.0001 296.5 -33.5001 367.13 106.876" stroke="#FFF9F9" strokeWidth="2" />
                     </svg>

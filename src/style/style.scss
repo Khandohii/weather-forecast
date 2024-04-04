@@ -271,67 +271,6 @@ body.lock {
     background: #be2453;
 }
 
-.form .agree {
-    color: #565656;
-    font-size: 14px;
-    font-weight: 350;
-    line-height: 1;
-
-    position: relative;
-
-    margin-top: 5px;
-    padding-left: 27px;
-}
-
-.form .agree:before {
-    color: #555;
-    font-size: 10px;
-    font-weight: 350;
-    line-height: 18px;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    width: 18px;
-    height: 18px;
-    padding-left: 0;
-
-    content: '!';
-    text-align: center;
-
-    border: 1px solid #e7e7e7;
-    border-radius: 50%;
-}
-
-.form .agree a {
-    color: currentColor;
-
-    position: relative;
-
-    display: inline-block;
-
-    transition: .2s linear;
-    text-decoration: none;
-}
-
-.form .agree a:after {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-    height: 1px;
-
-    content: '';
-
-    background: currentColor;
-}
-
-.form .agree a:hover {
-    color: #9c1f45;
-}
-
 
 .supports_error {
     font-family: 'Circe', 'Arial', sans-serif;
@@ -384,4 +323,10 @@ body.lock {
     display: block;
     max-width: 100%;
     max-height: 100%;
+}
+
+@media (max-width: 479px){
+    body{
+        font-size: 14px;
+    }
 }

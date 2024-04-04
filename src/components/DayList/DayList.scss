@@ -7,8 +7,16 @@
     backdrop-filter: blur(5px);
     text-align: center;
 
-    &__date {
+    @media (max-width: 479px){
+        padding: 15px;
+    }
+
+    &__day-week {
         font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+
+    &__date {
         margin-bottom: 15px;
     }
 
@@ -48,16 +56,31 @@
 
 .day-list {
     &__grid {
-        --margin-left: 20px;
-        --margin-bottom: 20px;
-        --items: 5;
+        width: calc(100% + 30px);
+        margin-left: -15px;
+        padding: 0 15px;
         
-        margin-left: calc(var(--margin-left, 0) * -1);
-        margin-bottom: calc(var(--margin-bottom, 0) * -1);
+        align-items: stretch;
+        align-content: stretch;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
+
     &__day {
-        margin-left: var(--margin-left, 0);
-        margin-bottom: var(--margin-bottom, 0);
-        width: calc(100% / var(--items, 1) - var(--margin-left, 0));
+        width: 200px;
+        flex-grow: 1;
+        flex-shrink: 0;
+
+        & + &{
+            margin-left: 15px;
+        }
+
+        @media (max-width: 479px){
+            width: 180px;
+        }
     }
 }

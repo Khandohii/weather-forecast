@@ -2,10 +2,20 @@
 
 .current-weather{
     background: rgba($color: $bg-blue, $alpha: .4);
-    padding: 40px;
+    --padding: 40px;
+    padding: var(--padding);
     border-radius: 30px;
     backdrop-filter: blur(5px);
     text-align: center;
+
+    @media (max-width: 768px){
+        --padding: 30px;
+        border-radius: 15px;
+    }
+
+    @media (max-width: 479px){
+        --padding: 15px;
+    }
 
     hr{
         border: none;
@@ -17,17 +27,49 @@
 
     &__city{
         font-size: 40px;
+
+        @media (max-width: 1024px){
+            font-size: 30px;
+        }
+
+        @media (max-width: 479px){
+            font-size: 25px;
+        }
     }
 
     &__temperature{
         margin-top: 20px;
         font-size: 80px;
         font-weight: 700;
+
+        @media (max-width: 1024px){
+            font-size: 50px;
+        }
+
+        @media (max-width: 479px){
+            font-size: 30px;
+            margin-top: 15px;
+        }
     }
 
     &__sky-condition{
         font-size: 30px;
         margin-top: 15px;
+
+        @media (max-width: 1024px){
+            font-size: 25px;
+        }
+
+        @media (max-width: 479px){
+            font-size: 20px;
+            margin-top: 15px;
+
+            &-icon{
+                img{
+                    height: 80px;
+                }
+            }
+        }
     }
 
     &__hours{
@@ -35,18 +77,46 @@
         justify-content: center;
         align-items: flex-start;
         align-content: flex-start;
-        margin-top: 40px;
-        margin-left: -40px;
-        margin-bottom: -30px;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        width: calc(100% + calc(var(--padding) * 2));
+        margin-left: calc(var(--padding) * -1);
+        margin-right: calc(var(--padding) * -1);
+        padding: 0 var(--padding);
+        margin-top: var(--padding);
 
-        & > *{
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        @media (max-width: 1024px){
+            justify-content: space-between;
+        }
+    }
+
+    &__hour{
+        width: 60px;
+        flex-shrink: 0;
+
+        & + &{
             margin-left: 40px;
-            margin-bottom: 30px;
+
+            @media (max-width: 768px){
+                margin-left: 30px;
+            }
+
+            @media (max-width: 479px){
+                margin-left: 20px;
+            }
         }
     }
 
     &__hour-time{
         font-size: 20px;
+
+        @media (max-width: 479px){
+            font-size: 16px;
+        }
     }
 
     &__hour-sky-state{
@@ -67,6 +137,10 @@
     &__hour-temperature{
         font-size: 20px;
         margin-top: 5px;
+
+        @media (max-width: 479px){
+            font-size: 16px;
+        }
     }
 
     .sunrize-sunset{
@@ -77,6 +151,7 @@
         
         &__info{
             flex-shrink: 0;
+            margin-bottom: -4px;
             svg{
                 display: block;
                 margin: 0 auto;
@@ -106,6 +181,7 @@
         justify-content: center;
         align-items: flex-start;
         align-content: flex-start;
+        flex-wrap: wrap;
 
         
         $margin-left: 40px;
