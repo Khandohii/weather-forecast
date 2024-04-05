@@ -27,6 +27,10 @@ const FormSearch = (props) => {
         return () => clearTimeout(searchTimeout);
     }, [searchTimeout]);
 
+    if (props.error) {
+        return false;
+    }
+
     return (
         <div className={'form-search ' + props.className}>
             <form action="" method="get">

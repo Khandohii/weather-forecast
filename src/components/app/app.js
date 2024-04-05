@@ -28,7 +28,7 @@ export default function App() {
     const {loading: locationLoading, getLocationData} = useOpenCageDataService();
     const {getSunrisesunset} = useSunrisesunsetService();    
 
-    const {loading: weatherLoading, getHourlyForecast} = useOpenWeatherService();
+    const {loading: weatherLoading, error, getHourlyForecast} = useOpenWeatherService();
 
     useEffect(() => {
         localStorageCoords();
@@ -122,13 +122,13 @@ export default function App() {
             <Header city={city} country={country} />
 
             <div className="cont">
-                <FormSearch className="sect-marg" setCoordsGlobal={setCoordsGlobal} setCityFunc={setCityFunc} />
+                <FormSearch className="sect-marg" setCoordsGlobal={setCoordsGlobal} setCityFunc={setCityFunc} error={error} />
 
                 {btnGetLocation}
 
                 <CurrentWeather coords={coords} city={city} sunrise={sunrise} locationLoading={locationLoading} weatherLoading={weatherLoading} sunset={sunset} hourlyList={hourlyList} />
 
-                <DayList daysList={daysList} weatherLoading={weatherLoading}/>
+                <DayList error={error} daysList={daysList} weatherLoading={weatherLoading}/>
             </div>
             <Footer />
         </div>

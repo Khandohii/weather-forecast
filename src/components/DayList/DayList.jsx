@@ -2,10 +2,10 @@ import './DayList.scss';
 import Spinner from '../Spinner/spinner';
 
 const DayList = (props) => {
-    const {daysList, weatherLoading} = props;
+    const {daysList, weatherLoading, error} = props;
 
     const spinner = weatherLoading ? <Spinner /> : null;
-    const content = !(spinner) ? <View daysList={daysList}/> : null;
+    const content = !(spinner || error) ? <View daysList={daysList}/> : null;
 
     return(
         <section className="day-list sect-marg">

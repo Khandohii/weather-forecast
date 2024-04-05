@@ -4,7 +4,7 @@ const useOpenWeatherService = () => {
     const {loading, request, error} = useHttp();
     const _apiBase = 'http://api.openweathermap.org/data/2.5/';
     const _apiIconsBase = 'https://openweathermap.org/img/wn/';
-    const _apiKey = process.env.REACT_APP_API_KEY;
+    const _apiKey = process.env.REACT_APP_API_KEY_OPEN_WEATHER;
 
     const getCurrentWeather = async (lat, lon) => {
         const res = await request(`${_apiBase}weather?lat=${lat}&lon=${lon}&appid=${_apiKey}&units=metric`);
