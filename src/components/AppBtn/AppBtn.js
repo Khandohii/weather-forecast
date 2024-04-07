@@ -1,4 +1,4 @@
-import './appBtn.scss';
+import './AppBtn.scss';
 
 export default function AppBtn(props) {
     return(

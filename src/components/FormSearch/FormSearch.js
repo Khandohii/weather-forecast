@@ -37,7 +37,7 @@ const FormSearch = (props) => {
                 <input 
                     name='city'
                     type="text" 
-                    placeholder='Search City' 
+                    placeholder='Find city' 
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     onChange={onInputChange}
