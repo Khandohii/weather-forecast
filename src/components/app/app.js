@@ -4,7 +4,7 @@ import './app.scss';
 import Header from '../appHeader/appHeader';
 import CurrentWeather from '../CurrentWeather/CurrentWeather';
 import Footer from '../appFooter/appFooter';
-import AppBtn from '../appBtn/appBtn';
+import AppBtn from '../AppBtn/AppBtn';
 
 import useGeoLocationService from '../../services/geoLocationService';
 import useSunrisesunsetService from '../../services/sunrisesunsetService';
