@@ -2,7 +2,7 @@ import {useHttp} from '../hooks/http.hook';
 
 const useOpenWeatherService = () => {
     const {loading, request, error} = useHttp();
-    const _apiBase = 'http://api.openweathermap.org/data/2.5/';
+    const _apiBase = 'https://api.openweathermap.org/data/2.5/';
     const _apiIconsBase = 'https://openweathermap.org/img/wn/';
     const _apiKey = process.env.REACT_APP_API_KEY_OPEN_WEATHER;
 
