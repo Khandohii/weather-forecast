@@ -3,7 +3,7 @@ import {useHttp} from '../hooks/http.hook';
 const useOpenCageDataService = () => {
     const {loading, request, error, clearError} = useHttp();
     const _apiBase = 'https://api.opencagedata.com/geocode/v1/json?';
-    const _apiKey = process.env.REACT_APP_OpenCageAPI_KEY;
+    const _apiKey = process.env.REACT_APP_OPENCAGE_API_KEY;
 
     const getLocationData = async (lat, lon) => {
         const res = await request(`${_apiBase}q=${lat},${lon}&key=${_apiKey}`);
