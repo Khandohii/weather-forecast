@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './App.scss';
+import './app.scss';
 
 import Header from '../AppHeader/AppHeader';
 import CurrentWeather from '../CurrentWeather/CurrentWeather';
