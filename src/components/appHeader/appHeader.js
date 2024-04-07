@@ -1,4 +1,4 @@
-import './AppHeader.scss';
+import './appHeader.scss';
 
 export default function Header(props) {
     return(
