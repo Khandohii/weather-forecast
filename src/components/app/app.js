@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import './app.scss';
 
-import Header from '../AppHeader/AppHeader';
+import Header from '../appHeader/appHeader';
 import CurrentWeather from '../CurrentWeather/CurrentWeather';
-import Footer from '../AppFooter/AppFooter';
-import AppBtn from '../AppBtn/AppBtn';
+import Footer from '../appFooter/appFooter';
+import AppBtn from '../appBtn/appBtn';
 
 import useGeoLocationService from '../../services/geoLocationService';
 import useSunrisesunsetService from '../../services/sunrisesunsetService';
