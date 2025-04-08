@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders FormSearch component correctly 1`] = `
+<div
+  className="form-search undefined"
+>
+  <form
+    action=""
+    method="get"
+  >
+    <input
+      name="city"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Find city"
+      type="text"
+    />
+  </form>
+</div>
+`;
