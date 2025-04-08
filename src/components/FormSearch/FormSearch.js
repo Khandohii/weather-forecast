@@ -1,5 +1,5 @@
 import './FormSearch.scss';
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 import { Transition } from 'react-transition-group';
 import useOpenStreetMapService from '../../services/openStreetMapService';
 
@@ -34,10 +34,10 @@ const FormSearch = (props) => {
     return (
         <div className={'form-search ' + props.className}>
             <form action="" method="get">
-                <input 
+                <input
                     name='city'
-                    type="text" 
-                    placeholder='Find city' 
+                    type="text"
+                    placeholder='Find city'
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     onChange={onInputChange}
@@ -54,13 +54,13 @@ const ResultList = (props) => {
     const {loading, error, getLocationData} = useOpenStreetMapService();
 
     const duration = 300;
-    
+
     const defaultStyle = {
       transition: `opacity ${duration}ms ease-in-out`,
       opacity: 0,
       visibility: 'hidden'
     }
-    
+
     const transitionStyles = {
       entering: { opacity: 1, visibility: 'visible' },
       entered:  { opacity: 1, visibility: 'visible' },
@@ -88,10 +88,10 @@ const ResultList = (props) => {
     }
 
     function renderItems(items) {
-        const cities = items.map((item, i) => {    
+        const cities = items.map((item, i) => {
             return(
                 <li key={item.id}>
-                    <button 
+                    <button
                         onClick={() => {
                             props.setCoordsGlobal(item.coords)
                             props.setCityFunc(item.name)
@@ -123,14 +123,17 @@ const ResultList = (props) => {
     const errorMessage = error ? "Error" : null;
     const spinner = loading ? "Loading..." : null;
 
+    const nodeRef = useRef(null);
+
     return(
-        <Transition 
-            in={props.show} 
+        <Transition
+            nodeRef={nodeRef}
+            in={props.show}
             timeout={duration}
             unmountOnExit
         >
             {state => (
-                <div 
+                <div
                     className='form-search__results'
                     style={{
                         ...defaultStyle,
