@@ -1,5 +1,5 @@
 import './FormSearch.scss';
-import React, { useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState} from 'react';
 import { Transition } from 'react-transition-group';
 import useOpenStreetMapService from '../../services/openStreetMapService';
 
@@ -23,6 +23,10 @@ const FormSearch = (props) => {
         setSearchTimeout(setTimeout(() => setShouldSearch(true), 500));
     };
 
+    const onSelectCity = () => {
+        setSearchData('')
+    }
+
     useEffect(() => {
         return () => clearTimeout(searchTimeout);
     }, [searchTimeout]);
@@ -37,14 +41,23 @@ const FormSearch = (props) => {
                 <input
                     name='city'
                     type="text"
-                    placeholder='Find city'
+                    placeholder='Town, city, country...'
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     onChange={onInputChange}
+                    value={searchData}
                 />
             </form>
 
-            <ResultList show={showList} searchData={searchData} shouldSearch={shouldSearch} setCityFunc={props.setCityFunc} setCoordsGlobal={props.setCoordsGlobal} setShouldSearch={setShouldSearch} />
+            <ResultList
+                show={showList}
+                searchData={searchData}
+                shouldSearch={shouldSearch}
+                setCityFunc={props.setCityFunc}
+                setCoordsGlobal={props.setCoordsGlobal}
+                setShouldSearch={setShouldSearch}
+                onSelectCity={onSelectCity}
+            />
         </div>
     )
 }
@@ -87,15 +100,18 @@ const ResultList = (props) => {
         setCityList(data);
     }
 
+    const onCityClick = (item) => {
+        props.setCoordsGlobal(item.coords)
+        props.setCityFunc(item.name)
+        props.onSelectCity();
+    }
+
     function renderItems(items) {
         const cities = items.map((item, i) => {
             return(
                 <li key={item.id}>
                     <button
-                        onClick={() => {
-                            props.setCoordsGlobal(item.coords)
-                            props.setCityFunc(item.name)
-                        }}
+                        onClick={() => onCityClick(item)}
                     >
                         {item.display_name}
                     </button>
@@ -123,11 +139,8 @@ const ResultList = (props) => {
     const errorMessage = error ? "Error" : null;
     const spinner = loading ? "Loading..." : null;
 
-    const nodeRef = useRef(null);
-
     return(
         <Transition
-            nodeRef={nodeRef}
             in={props.show}
             timeout={duration}
             unmountOnExit

@@ -12,7 +12,7 @@ const useOpenCageDataService = () => {
 
     const _transformData = (res) => {
         return {
-            city: res.results[0].components.city,
+            city: res.results[0].components.postal_city,
             country: res.results[0].components.country,
         }
     }

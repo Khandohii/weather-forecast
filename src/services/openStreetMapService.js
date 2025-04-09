@@ -10,6 +10,7 @@ const useOpenStreetMapService = () => {
     }
 
     const _transformData = (res) => {
+        console.log(res);
         const result = res.map((el) => {
             return {
                 coords: [el.lat, el.lon],

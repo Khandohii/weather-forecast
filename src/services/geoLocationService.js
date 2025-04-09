@@ -28,13 +28,14 @@ const useGeoLocationService = () => {
     }
 
     const _transformGeolocation = (res) => {
+        console.log(res);
         return {
             coords: res.loc.split(','),
             city: res.city,
             country: getCountryFullName(res.country) || res.country,
         }
     }
-    
+
 
     const getCountryFullName = (countryCode) => {
         return countries[countryCode]?.name;
