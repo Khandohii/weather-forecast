@@ -2,6 +2,7 @@ import './FormSearch.scss';
 import React, { useEffect, useState} from 'react';
 import { Transition } from 'react-transition-group';
 import useOpenStreetMapService from '../../services/openStreetMapService';
+import { useWeather } from '../../context/WeatherContext';
 
 const FormSearch = (props) => {
     const [showList, setShowList] = useState(false);
@@ -53,7 +54,6 @@ const FormSearch = (props) => {
                 show={showList}
                 searchData={searchData}
                 shouldSearch={shouldSearch}
-                setCityFunc={props.setCityFunc}
                 setCoordsGlobal={props.setCoordsGlobal}
                 setShouldSearch={setShouldSearch}
                 onSelectCity={onSelectCity}
@@ -64,6 +64,7 @@ const FormSearch = (props) => {
 
 const ResultList = (props) => {
     const [cityList, setCityList] = useState([]);
+    const {setCity} = useWeather();
     const {loading, error, getLocationData} = useOpenStreetMapService();
 
     const duration = 300;
@@ -102,7 +103,7 @@ const ResultList = (props) => {
 
     const onCityClick = (item) => {
         props.setCoordsGlobal(item.coords)
-        props.setCityFunc(item.name)
+        setCity(item.name)
         props.onSelectCity();
     }
 

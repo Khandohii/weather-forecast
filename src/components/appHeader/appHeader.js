@@ -1,12 +1,15 @@
 import './appHeader.scss';
+import { useWeather } from '../../context/WeatherContext';
 
-export default function Header(props) {
+export default function Header() {
+    const {city, country} = useWeather();
+
     return(
         <header className="header">
             <div className="cont header__cont">
                 <div className="header__text-logo">Weather Forecast</div>
 
-                {props.city || props.country ? <City city={props.city} country={props.country} /> : null}
+                {city || country ? <City city={city} country={country} /> : null}
             </div>
         </header>
     );

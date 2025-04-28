@@ -3,10 +3,12 @@ import './CurrentWeather.scss';
 import Spinner from '../Spinner/spinner';
 import useOpenWeatherService from '../../services/openWeatherService';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import { useWeather } from '../../context/WeatherContext';
 
 
-const CurrentWeather = ({weatherLoading, locationLoading, hourlyList, coords, city, country, sunset, sunrise}) => {
+const CurrentWeather = ({weatherLoading, locationLoading, hourlyList, coords, sunset, sunrise}) => {
     const [currentWeatherData, setCurrentWeatherData] = useState([]);
+    const {city, country} = useWeather();
 
     const {loading, error, getCurrentWeather} = useOpenWeatherService();
 
@@ -42,7 +44,8 @@ const CurrentWeather = ({weatherLoading, locationLoading, hourlyList, coords, ci
 
 const View = (props) => {
     const {currentTemperature, skyCondition, feelsLikeTemp, humidity, windPower, pressure, iconUrl} = props.data;
-    const {city, country, sunset, sunrise} = props;
+    const {sunset, sunrise} = props;
+    const {city, country} = useWeather();
 
     return (
         <>

@@ -12,11 +12,10 @@ import useOpenCageDataService from '../../services/openCageDataService'
 import useOpenWeatherService from '../../services/openWeatherService';
 import FormSearch from '../FormSearch/FormSearch';
 import DayList from '../DayList/DayList';
+import { useWeather } from '../../context/WeatherContext';
 
 export default function App() {
-    const [coords, setCoords] = useState([56.1676288, 10.174464]);
-    const [city, setCity] = useState();
-    const [country, setCountry] = useState();
+    const {setCountry, setCity, coords, setCoords} = useWeather();
     const [hourlyList, setHourlyList] = useState([]);
     const [daysList, setDaysList] = useState([]);
     const [localStorageLoaded, setLocalStorageLoaded] = useState(false);
@@ -55,10 +54,6 @@ export default function App() {
     const onHourlyListLoaded = (hourlyList) => {
         setHourlyList([...hourlyList.hourlyForecast]);
         setDaysList(hourlyList.dailyForecast)
-    }
-
-    const setCityFunc = (cityName) => {
-        setCity(cityName)
     }
 
     const setCoordsGlobal = (coords) => {
@@ -119,14 +114,14 @@ export default function App() {
 
     return (
         <div className="app">
-            <Header city={city} country={country} />
+            <Header />
 
             <div className="cont">
-                <FormSearch className="sect-marg" setCoordsGlobal={setCoordsGlobal} setCityFunc={setCityFunc} error={error} />
+                <FormSearch className="sect-marg" setCoordsGlobal={setCoordsGlobal} error={error} />
 
                 {btnGetLocation}
 
-                <CurrentWeather coords={coords} city={city} country={country} sunrise={sunrise} locationLoading={locationLoading} weatherLoading={weatherLoading} sunset={sunset} hourlyList={hourlyList} />
+                <CurrentWeather coords={coords} sunrise={sunrise} locationLoading={locationLoading} weatherLoading={weatherLoading} sunset={sunset} hourlyList={hourlyList} />
 
                 <DayList error={error} daysList={daysList} weatherLoading={weatherLoading}/>
             </div>
