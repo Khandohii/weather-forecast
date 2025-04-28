@@ -5,7 +5,7 @@ export default function Header(props) {
         <header className="header">
             <div className="cont header__cont">
                 <div className="header__text-logo">Weather Forecast</div>
-                
+
                 {props.city || props.country ? <City city={props.city} country={props.country} /> : null}
             </div>
         </header>
@@ -22,7 +22,7 @@ const City = (params) => {
                 </svg>
             </div>
 
-            {params.city}{params.city ? `, ${params.country}` : params.country}
+            {(params.city && params.city !== params.country) ? `${params.city}, ${params.country}` : params.country}
         </div>
     )
 }

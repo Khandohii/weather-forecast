@@ -26,7 +26,7 @@ export default function App() {
 
     const {clearError, getGeolocationByBrowser} = useGeoLocationService();
     const {loading: locationLoading, getLocationData} = useOpenCageDataService();
-    const {getSunrisesunset} = useSunrisesunsetService();    
+    const {getSunrisesunset} = useSunrisesunsetService();
 
     const {loading: weatherLoading, error, getHourlyForecast} = useOpenWeatherService();
 
@@ -77,7 +77,7 @@ export default function App() {
                 throw error;
             })
     }
-    
+
     const getGeopositionByBrowser = () => {
         getGeolocationByBrowser()
             .then((res) => {
@@ -113,7 +113,7 @@ export default function App() {
                     <path d="M12 6C11.3078 6 10.6311 6.20527 10.0555 6.58986C9.47993 6.97444 9.03133 7.52107 8.76642 8.16061C8.50152 8.80015 8.4322 9.50388 8.56725 10.1828C8.7023 10.8618 9.03564 11.4854 9.52513 11.9749C10.0146 12.4644 10.6383 12.7977 11.3172 12.9327C11.9961 13.0678 12.6999 12.9985 13.3394 12.7336C13.9789 12.4687 14.5256 12.0201 14.9101 11.4445C15.2947 10.8689 15.5 10.1922 15.5 9.5C15.5 8.57174 15.1313 7.6815 14.4749 7.02513C13.8185 6.36875 12.9283 6 12 6ZM12 11C11.7033 11 11.4133 10.912 11.1666 10.7472C10.92 10.5824 10.7277 10.3481 10.6142 10.074C10.5007 9.79994 10.4709 9.49834 10.5288 9.20736C10.5867 8.91639 10.7296 8.64912 10.9393 8.43934C11.1491 8.22956 11.4164 8.0867 11.7074 8.02882C11.9983 7.97094 12.2999 8.00065 12.574 8.11418C12.8481 8.22771 13.0824 8.41997 13.2472 8.66665C13.412 8.91332 13.5 9.20333 13.5 9.5C13.5 9.89782 13.342 10.2794 13.0607 10.5607C12.7794 10.842 12.3978 11 12 11Z" fill="#FEFEFE" />
                 </svg>
                 Get my geolocation
-            </AppBtn> 
+            </AppBtn>
         );
     }
 
@@ -126,7 +126,7 @@ export default function App() {
 
                 {btnGetLocation}
 
-                <CurrentWeather coords={coords} city={city} sunrise={sunrise} locationLoading={locationLoading} weatherLoading={weatherLoading} sunset={sunset} hourlyList={hourlyList} />
+                <CurrentWeather coords={coords} city={city} country={country} sunrise={sunrise} locationLoading={locationLoading} weatherLoading={weatherLoading} sunset={sunset} hourlyList={hourlyList} />
 
                 <DayList error={error} daysList={daysList} weatherLoading={weatherLoading}/>
             </div>

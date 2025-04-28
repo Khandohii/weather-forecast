@@ -5,20 +5,17 @@ import useOpenWeatherService from '../../services/openWeatherService';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 
-const CurrentWeather = (props) => {
+const CurrentWeather = ({weatherLoading, locationLoading, hourlyList, coords, city, country, sunset, sunrise}) => {
     const [currentWeatherData, setCurrentWeatherData] = useState([]);
 
     const {loading, error, getCurrentWeather} = useOpenWeatherService();
 
-    const {weatherLoading, locationLoading, hourlyList, coords, city, sunset, sunrise} = props;
-    
 
     useEffect(() => {
         updateDay();
-    }, [props.coords]);
+    }, [coords]);
 
     function updateDay() {
-        const {coords} = props;
         if (!coords) {
             return;
         }
@@ -32,8 +29,8 @@ const CurrentWeather = (props) => {
 
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading || weatherLoading || locationLoading ? <Spinner /> : null;
-    const content = !(spinner || error) ? <View data={currentWeatherData} hourlyList={hourlyList} coords={coords} city={city} sunset={sunset} sunrise={sunrise} /> : null;
-    
+    const content = !(spinner || error) ? <View data={currentWeatherData} hourlyList={hourlyList} coords={coords} city={city} country={country} sunset={sunset} sunrise={sunrise} /> : null;
+
     return(
         <div className="current-weather sect-marg">
             {errorMessage}
@@ -45,11 +42,11 @@ const CurrentWeather = (props) => {
 
 const View = (props) => {
     const {currentTemperature, skyCondition, feelsLikeTemp, humidity, windPower, pressure, iconUrl} = props.data;
-    const {city, sunset, sunrise} = props;
+    const {city, country, sunset, sunrise} = props;
 
     return (
         <>
-            <div className="current-weather__city">{city}</div>
+            <div className="current-weather__city">{city || country}</div>
 
             <div className="current-weather__temperature">{currentTemperature} &deg;C</div>
 
@@ -120,15 +117,15 @@ const Hours = ({hourlyList}) => {
     function renderItems(items) {
         const hours = items.map((item, i) => {
             if (hoursMaxLength <= i) return false;
-    
+
             return(
                 <div key={i} className="current-weather__hour">
                     <div className="current-weather__hour-time">{item.time}</div>
-    
+
                     <div className="current-weather__hour-sky-state">
                         <img src={item.icon + '.png'} />
                     </div>
-    
+
                     <div className="current-weather__hour-temperature">{item.temperature} &deg;C</div>
                 </div>
             )
